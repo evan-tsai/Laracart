@@ -14,5 +14,17 @@
     ],
     "require": {
         "php": "~7.0"
+    },
+    "extra": {
+        "laravel": {
+            "providers": [
+                "EvanTsai\\Laracart\\LaracartServiceProvider"
+            ]
+        }
+    },
+    "autoload": {
+        "psr-4": {
+            "EvanTsai\\Laracart\\": "src"
+        }
     }
 }
