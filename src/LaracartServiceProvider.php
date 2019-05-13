@@ -40,11 +40,11 @@ class LaracartServiceProvider extends ServiceProvider
     {
         $this->publishes([
             __DIR__ . '/config' => config_path(),
-        ], 'config');
+        ], 'configs');
 
         $this->publishes([
             __DIR__ . '/migrations' => database_path('migrations'),
-        ], 'migration');
+        ], 'migrations');
 
         $this->publishes([
             __DIR__ . '/resources/assets' => resource_path('assets/vendor/Laracart'),
@@ -55,12 +55,12 @@ class LaracartServiceProvider extends ServiceProvider
     {
         // Routes
 
-        $route_file = base_path('routes/web.php');
+        $routeFile = base_path('routes/web.php');
         $search = 'Laracart';
 
-        if ($this->checkExist($route_file, $search)) {
+        if ($this->checkExist($routeFile, $search)) {
             $data = "\n// Laracart\nEvanTsai\Laracart\Routes::get();";
-            $this->file->append($route_file, $data);
+            $this->file->append($routeFile, $data);
         }
 
         // Mark as added
