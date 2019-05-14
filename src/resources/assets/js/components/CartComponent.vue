@@ -31,7 +31,7 @@
         },
 
         methods: {
-            ...mapMutations(['ADD_ITEM', 'REMOVE_ITEM']),
+            ...mapMutations(['ADD_ITEM', 'REMOVE_ITEM', 'CLEAR_CART']),
 
             ...mapActions(['toggleItem', 'decrement']),
 
@@ -65,7 +65,11 @@
 
             subtract(product) {
                 this.decrement(product);
-            }
+            },
+
+            clearCart() {
+                this.CLEAR_CART();
+            },
         }
     }
 </script>

@@ -8,6 +8,15 @@ A Shopping Cart Package built with Laravel & VueJS
 composer require evantsai/laracart
 ```
 
+##### Add npm dependencies
+```bash
+npm install --save vue vuex vuex-persist
+```
+or
+```bash
+yarn add vue vuex vuex-persist
+```
+
 ##### Publish Package assets
 ```bash
 php artisan vendor:publish --provider="EvanTsai\Laracart\LaracartServiceProvider"
@@ -27,12 +36,16 @@ app.js
 ```js
 import Vue from 'vue';
 import Vuex from 'vuex';
-import Laracart from '../assets/vendor/Laracart/js/laracart';
+import VuexPersistence from 'vuex-persist';
+import Laracart, { cartModule } from '../assets/vendor/Laracart/js/laracart';
 
 Vue.use(Vuex);
-const store = new Vuex.Store();
+Vue.use(Laracart);
 
-Vue.use(Laracart, { store });
+const store = new Vuex.Store({
+    modules: { cart: cartModule },
+    plugins: [new VuexPersistence().plugin],
+});
 
 const app = new Vue({
     el: '#app',
@@ -59,10 +72,10 @@ const app = new Vue({
 ```
 #### Props
 
-|        Name        |   Type  |                                   Description                                 |
-|--------------------|---------|-------------------------------------------------------------------------------|
-| request-products   | Boolean | If true, executes an api call to populate 'products' variable. Default: false |
-| product-id         | Integer | If filled, executes an api call to populate 'product' variable. Default: null |
+|        Name        |   Type  | Default |                            Description                         |
+|--------------------|---------|---------|----------------------------------------------------------------|
+| request-products   | Boolean | False   |If true, executes an api call to populate 'products' variable.  |
+| product-id         | Integer | Null    |If filled, executes an api call to populate 'product' variable. |
 
 #### Usable Variables
 
@@ -87,4 +100,5 @@ Bind functions to click events.
 | removeItem(product) | Remove item from cart                                          |
 | toggle(product)     | Remove item if exists, otherwise add item                      |
 | subtract(product)   | Decrements item quantity by one                                |
+| clearCart()         | Clears current cart                                            |
 

@@ -63,7 +63,11 @@ const mutations = {
 
     DECREMENT(state, record) {
         record.quantity--;
-    }
+    },
+
+    CLEAR_CART(state) {
+        state.cart = [];
+    },
 };
 
 const findProduct = ({ cart }, product) => {

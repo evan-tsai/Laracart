@@ -1,10 +1,9 @@
 import CartComponent from './components/CartComponent';
-import storeModule from './storeModule';
+import cartModule from './storeModule';
 
-export default function install(Vue, options = {}) {
-    if (!options.store) console.warn('Please provide a store!!');
 
+export default function install(Vue) {
     Vue.component('cart-component', CartComponent);
-
-    options.store.registerModule('cartModule', storeModule);
 }
+
+export { cartModule };
