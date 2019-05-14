@@ -31,7 +31,7 @@
         },
 
         methods: {
-            ...mapMutations(['ADD_ITEM', 'REMOVE_ITEM', 'CLEAR_CART']),
+            ...mapMutations(['ADD_ITEM', 'REMOVE_ITEM', 'SET_QUANTITY', 'CLEAR_CART']),
 
             ...mapActions(['toggleItem', 'decrement']),
 
@@ -65,6 +65,10 @@
 
             subtract(product) {
                 this.decrement(product);
+            },
+
+            setQuantity(product, quantity) {
+                this.SET_QUANTITY({ product, quantity });
             },
 
             clearCart() {

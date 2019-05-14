@@ -10,11 +10,11 @@ composer require evantsai/laracart
 
 ##### Add npm dependencies
 ```bash
-npm install --save vue vuex vuex-persist
+npm install --save vue vuex vuex-persist axios
 ```
 or
 ```bash
-yarn add vue vuex vuex-persist
+yarn add vue vuex vuex-persist axios
 ```
 
 ##### Publish Package assets
@@ -43,7 +43,7 @@ Vue.use(Vuex);
 Vue.use(Laracart);
 
 const store = new Vuex.Store({
-    modules: { cart: cartModule },
+    modules: { cartModule },
     plugins: [new VuexPersistence().plugin],
 });
 
@@ -94,11 +94,12 @@ Variables can be used inside template
 
 Bind functions to click events.
 
-|         Name        |                           Description                          |
-|---------------------|----------------------------------------------------------------|
-| addItem(product)    | Add item to cart if item doesn't exist, otherwise add quantity |
-| removeItem(product) | Remove item from cart                                          |
-| toggle(product)     | Remove item if exists, otherwise add item                      |
-| subtract(product)   | Decrements item quantity by one                                |
-| clearCart()         | Clears current cart                                            |
+|           Name          |                           Description                            |
+|-------------------------|------------------------------------------------------------------|
+| addItem(product)        | Add item to cart if item doesn't exist, otherwise add quantity   |
+| removeItem(product)     | Remove item from cart                                            |
+| toggle(product)         | Remove item if exists, otherwise add item                        |
+| subtract(product)       | Decrements item quantity by one                                  |
+| setQuantity(product, 5) | Sets quantity to specified number (can be used with input event) |
+| clearCart()             | Clears current cart                                              |
 

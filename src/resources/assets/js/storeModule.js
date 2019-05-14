@@ -62,7 +62,15 @@ const mutations = {
     },
 
     DECREMENT(state, record) {
-        record.quantity--;
+        record && record.quantity--;
+    },
+
+    SET_QUANTITY(state, { product, quantity }) {
+        const record = findProduct(state, product);
+
+        if (record) {
+            record.quantity = quantity;
+        }
     },
 
     CLEAR_CART(state) {
