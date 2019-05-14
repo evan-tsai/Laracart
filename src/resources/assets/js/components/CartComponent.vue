@@ -33,7 +33,7 @@
         methods: {
             ...mapMutations(['ADD_ITEM', 'REMOVE_ITEM', 'SET_QUANTITY', 'CLEAR_CART']),
 
-            ...mapActions(['toggleItem', 'decrement']),
+            ...mapActions(['toggleItem', 'decrement', 'submit']),
 
             getProduct() {
                 axios.get(`/laracart/product/${this.productId}`).then((response) => {
@@ -74,6 +74,13 @@
             clearCart() {
                 this.CLEAR_CART();
             },
+
+            submitForm() {
+                const form = document.querySelector('form');
+                const formData = new FormData(form);
+
+                this.submit(formData);
+            }
         }
     }
 </script>

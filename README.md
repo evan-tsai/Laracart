@@ -102,4 +102,4 @@ Bind functions to click events.
 | subtract(product)       | Decrements item quantity by one                                  |
 | setQuantity(product, 5) | Sets quantity to specified number (can be used with input event) |
 | clearCart()             | Clears current cart                                              |
-
+| submitForm()            | Submits first form inside cart-component                         |

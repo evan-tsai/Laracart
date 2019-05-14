@@ -39,6 +39,18 @@ const actions = {
                 commit('REMOVE_ITEM', product);
             }
         }
+    },
+
+    submit({ commit, state }, form) {
+        form.append('cart', JSON.stringify(state.cart));
+
+        axios.post('/laracart/order', form)
+            .then(() => {
+                console.log('success');
+            })
+            .catch((error) => {
+                console.log(error);
+            });
     }
 };
 

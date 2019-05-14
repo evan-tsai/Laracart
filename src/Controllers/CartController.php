@@ -18,4 +18,9 @@ class CartController extends Controller
     {
         return response()->json($product);
     }
+
+    public function createOrder(Request $request)
+    {
+        dd($request);
+    }
 }

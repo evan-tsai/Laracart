@@ -18,6 +18,7 @@ class Routes
         ], function () use ($router, $controller) {
             $router->get('product', ['uses' => "$controller@getProducts", 'as' => 'product.get']);
             $router->get('product/{product}', ['uses' => "$controller@findProduct", 'as' => 'product.find']);
+            $router->post('order', ['uses' => "$controller@createOrder", 'as' => 'order.create']);
         });
     }
 }
