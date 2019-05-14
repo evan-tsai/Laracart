@@ -27,7 +27,7 @@
         },
 
         computed: {
-            ...mapGetters(['cart', 'countCart']),
+            ...mapGetters(['cart', 'countCart', 'countItems']),
         },
 
         methods: {
