@@ -16,7 +16,8 @@ class Routes
             'prefix' => 'laracart',
             'as' => 'laracart.',
         ], function () use ($router, $controller) {
-            $router->get('product', ['uses' => "$controller@getProducts", 'as' => 'products']);
+            $router->get('product', ['uses' => "$controller@getProducts", 'as' => 'product.get']);
+            $router->get('product/{product}', ['uses' => "$controller@findProduct", 'as' => 'product.find']);
         });
     }
 }

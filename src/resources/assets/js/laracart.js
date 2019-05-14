@@ -1,10 +1,10 @@
-import ProductList from './components/ProductList';
+import CartComponent from './components/CartComponent';
 import storeModule from './storeModule';
 
 export default function install(Vue, options = {}) {
     if (!options.store) console.warn('Please provide a store!!');
 
-    Vue.component('product-list', ProductList);
+    Vue.component('cart-component', CartComponent);
 
-    options.store.registerModule('cartModule', storeModule)
+    options.store.registerModule('cartModule', storeModule);
 }
