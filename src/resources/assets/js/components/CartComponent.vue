@@ -1,5 +1,5 @@
 <script>
-    import { mapMutations, mapGetters } from 'vuex';
+    import { mapGetters, mapMutations, mapActions } from 'vuex';
 
     export default {
         name: "CartComponent",
@@ -31,9 +31,9 @@
         },
 
         methods: {
-            ...mapMutations([
-                'ADD_ITEM',
-            ]),
+            ...mapMutations(['ADD_ITEM', 'REMOVE_ITEM']),
+
+            ...mapActions(['toggleItem', 'decrement']),
 
             getProduct() {
                 axios.get(`/laracart/product/${this.productId}`).then((response) => {
@@ -53,6 +53,18 @@
 
             addItem(product) {
                 this.ADD_ITEM(product);
+            },
+
+            removeItem(product) {
+                this.REMOVE_ITEM(product);
+            },
+
+            toggle(product) {
+                this.toggleItem(product);
+            },
+
+            subtract(product) {
+                this.decrement(product);
             }
         }
     }
