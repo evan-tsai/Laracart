@@ -49,8 +49,7 @@ const actions = {
         axios.post('/laracart/order', form)
         .then((response) => {
             commit('CLEAR_CART');
-            console.log(response.data);
-            // window.location.href = response.data.redirect;
+            window.location.href = response.data.redirect;
         })
         .catch((error) => {
             notify(error, TYPE_ERROR);

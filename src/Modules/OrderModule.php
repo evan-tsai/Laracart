@@ -10,7 +10,7 @@ use Illuminate\Support\Facades\Schema;
 
 class OrderModule
 {
-    public $order;
+    protected $order;
 
     public function __construct()
     {
