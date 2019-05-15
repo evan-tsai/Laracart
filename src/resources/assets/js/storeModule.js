@@ -1,3 +1,5 @@
+import notify, { ITEM_ADDED, ITEM_REMOVED, TYPE_ERROR } from './notify';
+
 const state = {
     cart: [],
 };
@@ -45,12 +47,13 @@ const actions = {
         form.append('cart', JSON.stringify(state.cart));
 
         axios.post('/laracart/order', form)
-            .then(() => {
-                console.log('success');
-            })
-            .catch((error) => {
-                console.log(error);
-            });
+        .then((response) => {
+            commit('CLEAR_CART');
+            window.location.href = response.data.redirect;
+        })
+        .catch((error) => {
+            notify(error, TYPE_ERROR);
+        });
     }
 };
 
@@ -60,6 +63,7 @@ const mutations = {
 
         if (!record) {
             state.cart.push({...product, quantity: 1});
+            notify(ITEM_ADDED);
         } else {
             record.quantity++;
         }
@@ -70,6 +74,7 @@ const mutations = {
 
         if (record) {
             state.cart = state.cart.filter(item => item !== record);
+            notify(ITEM_REMOVED);
         }
     },
 

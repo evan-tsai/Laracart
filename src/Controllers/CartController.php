@@ -21,6 +21,9 @@ class CartController extends Controller
 
     public function createOrder(Request $request)
     {
-        dd($request);
+
+        return response()->json([
+            'redirect' => route('test')
+        ]);
     }
 }

@@ -103,3 +103,8 @@ Bind functions to click events.
 | setQuantity(product, 5) | Sets quantity to specified number (can be used with input event) |
 | clearCart()             | Clears current cart                                              |
 | submitForm()            | Submits first form inside cart-component                         |
+
+#### Notifications
+
+Can add custom notifications via `assets/vendor/Laracart/js/notify.js`, uses console by default.
+
