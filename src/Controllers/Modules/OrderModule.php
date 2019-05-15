@@ -37,7 +37,7 @@ class OrderModule
 
     public function placeOrder($request)
     {
-        $request->validate(array_merge(
+        $validated = $request->validate(array_merge(
             ['cart' => 'required|json'],
             config('laracart.order_validation')
         ));
@@ -46,7 +46,7 @@ class OrderModule
             $this->order->user_id = Auth::id();
         }
 
-        foreach ($request->except(['cart']) as $key => $value) {
+        foreach ($validated as $key => $value) {
             if (Schema::hasColumn(config('laracart.tables.order'), $key)) {
                 $this->order->{$key} = $value;
             }
@@ -54,8 +54,9 @@ class OrderModule
 
         $this->order->save();
 
-        $products = collect(json_decode($request->cart, true));
+        $products = collect(json_decode($validated['cart'], true));
 
+        // Create array of product IDs with quantity
         $products = $products->mapWithKeys(function ($item) {
             return [$item['id'] => ['quantity' => $item['quantity']]];
         });
