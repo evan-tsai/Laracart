@@ -3,9 +3,10 @@
 namespace EvanTsai\Laracart\Controllers;
 
 use App\Http\Controllers\Controller;
-use EvanTsai\Laracart\Product;
+use EvanTsai\Laracart\Controllers\Modules\OrderModule;
 use EvanTsai\Laracart\Queries\ProductQuery;
 use Illuminate\Http\Request;
+
 
 class CartController extends Controller
 {
@@ -21,11 +22,12 @@ class CartController extends Controller
         return response()->json($product);
     }
 
-    public function createOrder(Request $request)
+    public function createOrder(Request $request, OrderModule $orderModule)
     {
+        $orderModule->placeOrder($request);
 
         return response()->json([
-            'redirect' => route('test')
+            'redirect' => route('test'),
         ]);
     }
 }

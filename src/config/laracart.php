@@ -41,22 +41,23 @@ return [
     'tables' => [
         'product' => 'products',
         'order' => 'orders',
-        'user' => 'users',
     ],
 
     /*
     |--------------------------------------------------------------------------
-    | Request
+    | Order Validation
     |--------------------------------------------------------------------------
     |
-    | When sending your form to the backend, you can set
-    | which fields you want to exclude. By default,
-    | the backend will accept all fields and
-    | insert them into the database.
+    | Specify validation for creating a new order.
+    | Make sure key matches database field
+    | and form input names.
     |
     */
 
-    'request' => [
-        'except' => [],
+    'order_validation' => [
+        'name' => 'required|string',
+        'email' => 'required|email',
+        'phone' => 'required|string',
+        'address' => 'nullable|string',
     ],
 ];

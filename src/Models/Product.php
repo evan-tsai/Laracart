@@ -1,6 +1,6 @@
 <?php
 
-namespace EvanTsai\Laracart;
+namespace EvanTsai\Laracart\Models;
 
 use Illuminate\Database\Eloquent\Model;
 

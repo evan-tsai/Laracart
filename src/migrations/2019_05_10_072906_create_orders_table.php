@@ -18,8 +18,8 @@ class CreateOrdersTable extends Migration
             $table->unsignedInteger('user_id')->nullable();
             $table->string('email');
             $table->string('name');
+            $table->string('phone');
             $table->string('address')->nullable();
-            $table->string('phone')->nullable();
             $table->string('payment_method')->nullable();
             $table->string('payment_id')->nullable();
             $table->unsignedTinyInteger('status')->default(1);
