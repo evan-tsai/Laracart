@@ -3,7 +3,7 @@
 namespace EvanTsai\Laracart\Controllers;
 
 use App\Http\Controllers\Controller;
-use EvanTsai\Laracart\Controllers\Modules\OrderModule;
+use EvanTsai\Laracart\Modules\OrderModule;
 use EvanTsai\Laracart\Queries\ProductQuery;
 use Illuminate\Http\Request;
 

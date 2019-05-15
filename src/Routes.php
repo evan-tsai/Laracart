@@ -13,7 +13,7 @@ class Routes
         $controller = config('laracart.controller', '\EvanTsai\Laracart\Controllers\CartController');
 
         $router->group([
-            'prefix' => 'laracart',
+            'prefix' => config('laracart.route_prefix'),
             'as' => 'laracart.',
         ], function () use ($router, $controller) {
             $router->get('product', ['uses' => "$controller@getProducts", 'as' => 'product.get']);

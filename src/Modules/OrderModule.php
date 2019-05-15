@@ -1,7 +1,7 @@
 <?php
 
 
-namespace EvanTsai\Laracart\Controllers\Modules;
+namespace EvanTsai\Laracart\Modules;
 
 
 use Illuminate\Database\Eloquent\Model;
@@ -46,6 +46,7 @@ class OrderModule
             $this->order->user_id = Auth::id();
         }
 
+        // Insert validated values into db
         foreach ($validated as $key => $value) {
             if (Schema::hasColumn(config('laracart.tables.order'), $key)) {
                 $this->order->{$key} = $value;
@@ -54,7 +55,14 @@ class OrderModule
 
         $this->order->save();
 
-        $products = collect(json_decode($validated['cart'], true));
+        $cartItems = json_decode($validated['cart'], true);
+
+        $this->saveProducts($cartItems);
+    }
+
+    protected function saveProducts($items)
+    {
+        $products = collect($items);
 
         // Create array of product IDs with quantity
         $products = $products->mapWithKeys(function ($item) {
