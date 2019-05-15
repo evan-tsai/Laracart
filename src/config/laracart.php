@@ -14,19 +14,34 @@ return [
 
     /*
     |--------------------------------------------------------------------------
-    | Classes
+    | Models
     |--------------------------------------------------------------------------
     |
-    | You can specify your own class, if using own Product class,
-    | you should extend the package class. For User model,
+    | You can specify your own classes. For User model,
     | set value to null if login is not required for
     | checkout.
     |
     */
 
-    'classes' => [
-        'product' => '\EvanTsai\Laracart\Product',
+    'models' => [
+        'product' => 'App\Product',
+        'order' => 'App\Order',
         'user' => 'App\Users',
+    ],
+
+    /*
+    |--------------------------------------------------------------------------
+    | Tables
+    |--------------------------------------------------------------------------
+    |
+    | You can specify your table names.
+    |
+    */
+
+    'tables' => [
+        'product' => 'products',
+        'order' => 'orders',
+        'user' => 'users',
     ],
 
     /*

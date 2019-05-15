@@ -13,12 +13,11 @@ class CreateOrdersProductsTable extends Migration
      */
     public function up()
     {
-        Schema::create('orders_products', function (Blueprint $table) {
+        Schema::create($this->getTableName(), function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->unsignedInteger('order_id');
             $table->unsignedInteger('product_id');
             $table->unsignedInteger('quantity');
-
             $table->timestamps();
         });
     }
@@ -30,6 +29,11 @@ class CreateOrdersProductsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('orders_products');
+        Schema::dropIfExists($this->getTableName());
+    }
+
+    protected function getTableName()
+    {
+        return config('laracart.tables.order') . '_' . config('laracart.tables.product');
     }
 }

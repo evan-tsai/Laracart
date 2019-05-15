@@ -8,7 +8,7 @@ class ProductQuery extends BaseQuery
 {
     protected function className()
     {
-        return config('laracart.classes.product', '\EvanTsai\Laracart\Product');
+        return config('laracart.models.product');
     }
 
     protected function appendQuery()

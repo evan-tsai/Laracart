@@ -13,4 +13,12 @@ class Order extends Model
     const STATUS_COMPLETED = 5;
     const STATUS_FAILED = 6;
     const STATUS_CANCELLED = 7;
+
+    protected $table;
+
+    public function __construct(array $attributes = [])
+    {
+        parent::__construct($attributes);
+        $this->table = config('laracart.tables.order');
+    }
 }

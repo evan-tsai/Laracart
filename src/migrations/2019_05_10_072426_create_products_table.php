@@ -13,7 +13,7 @@ class CreateProductsTable extends Migration
      */
     public function up()
     {
-        Schema::create('products', function (Blueprint $table) {
+        Schema::create($this->getTableName(), function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->string('name');
             $table->string('image_path')->nullable();
@@ -31,6 +31,11 @@ class CreateProductsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('products');
+        Schema::dropIfExists($this->getTableName());
+    }
+
+    protected function getTableName()
+    {
+        return config('laracart.tables.product');
     }
 }

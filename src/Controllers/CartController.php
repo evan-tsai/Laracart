@@ -14,8 +14,10 @@ class CartController extends Controller
         return response()->json($query->get());
     }
 
-    public function findProduct(Product $product)
+    public function findProduct($id, ProductQuery $query)
     {
+        $product = $query->find($id);
+
         return response()->json($product);
     }
 

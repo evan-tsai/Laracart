@@ -18,6 +18,11 @@ abstract class BaseQuery
         return $this->appendQuery()->get();
     }
 
+    public function find($id)
+    {
+        return $this->query->find($id);
+    }
+
     abstract protected function className();
     abstract protected function appendQuery();
 }
