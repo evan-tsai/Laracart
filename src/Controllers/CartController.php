@@ -34,14 +34,7 @@ class CartController extends Controller
 
     public function checkout($id, Request $request, OrderModule $orderModule)
     {
-        $request->validate([
-            'gateway' => [
-                'sometimes',
-                Rule::in(config('laracart.available_gateways')),
-            ]
-        ]);
-
-        $orderModule->for($id)->checkout($request->gateway);
+        $orderModule->for($id)->checkout($request);
     }
 
     public function callback()

@@ -12,7 +12,7 @@ abstract class PaymentGateway
 
     public function __construct()
     {
-        $this->callbackRoute = route(config('laracart.payment.callback_route'));
+        $this->callbackRoute = route(config('laracart.callback_route'));
     }
 
     abstract public function checkOut(Model $order);

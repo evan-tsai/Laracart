@@ -4,17 +4,18 @@
 namespace EvanTsai\Laracart\Gateways;
 
 
+use ECPay_AllInOne;
 use Illuminate\Database\Eloquent\Model;
 
 class ECPayGateway extends PaymentGateway
 {
     protected $sdk;
 
-    public function __construct(\ECPay_AllInOne $sdk)
+    public function __construct()
     {
         parent::__construct();
 
-        $this->sdk = $sdk;
+        $this->sdk = new ECPay_AllInOne;
     }
 
     public function checkOut(Model $order)
@@ -40,7 +41,7 @@ class ECPayGateway extends PaymentGateway
                 'Quantity'  => (int) "1",
                 'URL'  => ""));
 
-            $this->sdk->CheckOut();
+            return $this->sdk->CheckOutString();
         } catch (\Exception $e) {
             echo $e->getMessage();
         }

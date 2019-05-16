@@ -19,7 +19,7 @@ class Routes
             $router->get('product', ['uses' => "$controller@getProducts", 'as' => 'product.get']);
             $router->get('product/{id}', ['uses' => "$controller@findProduct", 'as' => 'product.find']);
             $router->post('order', ['uses' => "$controller@createOrder", 'as' => 'order.create']);
-            $router->post('checkout', ['uses' => "$controller@checkout", 'as' => 'checkout']);
+            $router->post('checkout/{id}', ['uses' => "$controller@checkout", 'as' => 'checkout']);
             $router->post('callback', ['uses' => "$controller@callback", 'as' => 'callback']);
         });
     }
