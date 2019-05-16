@@ -4,7 +4,7 @@
 namespace EvanTsai\Laracart\Modules;
 
 
-use Illuminate\Database\Eloquent\Model;
+use EvanTsai\Laracart\Payment\PaymentGateway;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Schema;
 
@@ -24,13 +24,9 @@ class OrderModule
         return config('laracart.models.order');
     }
 
-    public function for(Model $order)
+    public function for($id)
     {
-        if ($order && !is_a($order, $this->getOrderClass())) {
-            throw new \UnexpectedValueException('Model is not a ' . $this->getOrderClass());
-        }
-
-        $this->order = $order;
+        $this->order = call_user_func($this->getOrderClass() . '::find', $id);
 
         return $this;
     }
@@ -70,5 +66,20 @@ class OrderModule
         });
 
         $this->order->products()->sync($products);
+    }
+
+    public function checkout($gateway)
+    {
+        $this->order->payment_gateway = $gateway;
+        $this->order->save();
+
+        $gatewayClassName = config('laracart.gateways.' . $gateway . '.class');
+        $gatewayClass = new $gatewayClassName;
+
+        if (!$gatewayClass instanceof PaymentGateway) {
+            throw new \UnexpectedValueException($gatewayClassName . ' is not a Payment Gateway');
+        }
+
+        $gatewayClass->checkout($this->order);
     }
 }

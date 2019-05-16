@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use EvanTsai\Laracart\Modules\OrderModule;
 use EvanTsai\Laracart\Queries\ProductQuery;
 use Illuminate\Http\Request;
+use Illuminate\Validation\Rule;
 
 
 class CartController extends Controller
@@ -29,5 +30,22 @@ class CartController extends Controller
         return response()->json([
             'redirect' => route('test'),
         ]);
+    }
+
+    public function checkout($id, Request $request, OrderModule $orderModule)
+    {
+        $request->validate([
+            'gateway' => [
+                'sometimes',
+                Rule::in(config('laracart.available_gateways')),
+            ]
+        ]);
+
+        $orderModule->for($id)->checkout($request->gateway);
+    }
+
+    public function callback()
+    {
+
     }
 }

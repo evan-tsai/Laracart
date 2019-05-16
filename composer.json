@@ -23,6 +23,9 @@
         }
     },
     "autoload": {
+        "classmap": [
+            "src/lib"
+        ],
         "psr-4": {
             "EvanTsai\\Laracart\\": "src"
         }

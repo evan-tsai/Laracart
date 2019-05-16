@@ -20,6 +20,7 @@ class CreateOrdersTable extends Migration
             $table->string('name');
             $table->string('phone');
             $table->string('address')->nullable();
+            $table->string('payment_gateway')->nullable();
             $table->string('payment_method')->nullable();
             $table->string('payment_id')->nullable();
             $table->unsignedTinyInteger('status')->default(1);
