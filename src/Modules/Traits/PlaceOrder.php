@@ -20,9 +20,7 @@ trait PlaceOrder
         $cartItems = json_decode($validated['cart'], true);
         $this->saveProducts($cartItems);
 
-        if (config('laracart.check_out_immediately')) {
-            $this->checkout($request);
-        }
+        return $this;
     }
 
     protected function validate($request)

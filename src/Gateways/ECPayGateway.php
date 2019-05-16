@@ -25,8 +25,8 @@ class ECPayGateway extends PaymentGateway
             $this->sdk->HashKey     = config('laracart.gateways.ecpay.hash_key');
             $this->sdk->HashIV      = config('laracart.gateways.ecpay.hash_iv');
             $this->sdk->MerchantID  = config('laracart.gateways.ecpay.merchant_id');
-            $this->sdk->Send['ReturnURL'] = config('laracart.callback_route');
-            $this->sdk->Send['MerchantTradeNo']   = $order->id;
+            $this->sdk->Send['ReturnURL'] = route(config('laracart.callback_route'));
+            $this->sdk->Send['MerchantTradeNo']   = uniqid();
             $this->sdk->Send['MerchantTradeDate'] = date('Y/m/d H:i:s');
             $this->sdk->Send['TotalAmount']       = (int) 2000;
             $this->sdk->Send['TradeDesc']         = '商店訂購商品，訂單編號：' . $order->id;
@@ -34,14 +34,18 @@ class ECPayGateway extends PaymentGateway
             $this->sdk->Send['ChoosePayment'] = \ECPay_PaymentMethod::ALL;
             $this->sdk->Send['EncryptType'] = 1;
 
-            array_push($this->sdk->Send['Items'], array(
-                'Name'  => "商品名稱",
-                'Price'  => (int)1000,
-                'Currency'  => "元",
-                'Quantity'  => (int) "1",
-                'URL'  => ""));
+            $items = $order->products->map(function ($item) {
+                return [
+                    'Name' => $item->name,
+                    'Price' => (int) $item->price,
+                    'Currency' => '元',
+                    'Quantity' => (int) $item->pivot->quantity,
+                ];
+            });
 
-            return $this->sdk->CheckOutString();
+            $this->sdk->Send['Items'] = $items->toArray();
+
+            return $this->sdk->CheckOutString(null);
         } catch (\Exception $e) {
             echo $e->getMessage();
         }

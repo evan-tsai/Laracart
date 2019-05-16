@@ -19,7 +19,7 @@ trait Checkout
 
         $gatewayClass = $this->getGatewayClass($gateway);
 
-        $gatewayClass->checkout($this->order);
+        return $gatewayClass->checkout($this->order);
     }
 
     protected function validateAndRetrieveGateway($request)
