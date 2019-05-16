@@ -1,7 +1,7 @@
 <?php
 
 
-namespace EvanTsai\Laracart\Payment;
+namespace EvanTsai\Laracart\Gateways;
 
 
 use Illuminate\Database\Eloquent\Model;

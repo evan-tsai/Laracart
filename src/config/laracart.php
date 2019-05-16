@@ -82,7 +82,7 @@ return [
 
     'gateways' => [
         'ecpay' => [
-            'class' => \EvanTsai\Laracart\Payment\ECPayGateway::class,
+            'class' => \EvanTsai\Laracart\Gateways\ECPayGateway::class,
             'api_url' => 'https://payment-stage.ecpay.com.tw/Cashier/AioCheckOut/V5',
             'merchant_id' => env('ECPAY_MERCHANT_ID'),
             'hash_key' => env('ECPAY_HASH_KEY'),

@@ -4,7 +4,7 @@
 namespace EvanTsai\Laracart\Modules;
 
 
-use EvanTsai\Laracart\Payment\PaymentGateway;
+use EvanTsai\Laracart\Gateways\PaymentGateway;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Schema;
 
