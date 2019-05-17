@@ -21,21 +21,22 @@ class ECPayGateway extends PaymentGateway
     public function checkOut(Model $order)
     {
         try {
-            $this->sdk->ServiceURL  = config('laracart.gateways.ecpay.api_url');
-            $this->sdk->HashKey     = config('laracart.gateways.ecpay.hash_key');
-            $this->sdk->HashIV      = config('laracart.gateways.ecpay.hash_iv');
-            $this->sdk->MerchantID  = config('laracart.gateways.ecpay.merchant_id');
-            $this->sdk->Send['ReturnURL'] = route(config('laracart.callback_route'));
+            $this->sdk->ServiceURL = config('laracart.gateways.ecpay.api_url');
+            $this->sdk->HashKey    = config('laracart.gateways.ecpay.hash_key');
+            $this->sdk->HashIV     = config('laracart.gateways.ecpay.hash_iv');
+            $this->sdk->MerchantID = config('laracart.gateways.ecpay.merchant_id');
+
+            $this->sdk->Send['ReturnURL']         = route(config('laracart.callback_route'));
             $this->sdk->Send['MerchantTradeNo']   = $order->id;
             $this->sdk->Send['MerchantTradeDate'] = date('Y/m/d H:i:s');
             $this->sdk->Send['TradeDesc']         = '商店訂購商品，訂單編號：' . $order->id;
             $this->sdk->Send['NeedExtraPaidInfo'] = 'Y';
-            $this->sdk->Send['ChoosePayment'] = $order->payment_method;
-            $this->sdk->Send['EncryptType'] = 1;
-            $this->sdk->Send['Items'] = $this->getItems($order);
-            $this->sdk->Send['TotalAmount'] = (int) $this->getTotal($order);
+            $this->sdk->Send['ChoosePayment']     = $order->payment_method;
+            $this->sdk->Send['EncryptType']       = 1;
+            $this->sdk->Send['Items']             = $this->getItems($order);
+            $this->sdk->Send['TotalAmount']       = (int) $this->getTotal($order);
 
-            return $this->sdk->CheckOutString(null);
+            return ['html' => $this->sdk->CheckOutString(null)];
         } catch (\Exception $e) {
             return $e->getMessage();
         }

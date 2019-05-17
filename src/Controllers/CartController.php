@@ -28,9 +28,9 @@ class CartController extends Controller
         $orderModule->placeOrder($request);
 
         if (config('laracart.check_out_immediately')) {
-            $html = $orderModule->checkout($request);
+            $result = $orderModule->checkout($request);
 
-            return response()->json(['html' => $html]);
+            return response()->json($result);
         }
 
         return response()->json(['redirect' => route('test')]);

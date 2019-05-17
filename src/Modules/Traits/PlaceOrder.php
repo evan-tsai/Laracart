@@ -24,7 +24,7 @@ trait PlaceOrder
         return $this;
     }
 
-    public function calculateNextId()
+    protected function calculateNextId()
     {
         $yearMonth = Carbon::now()->format('Ym');
         $idPrefix = strtoupper(sprintf('%s%06d', config('laracart.order_prefix'), $yearMonth));
