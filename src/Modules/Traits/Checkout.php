@@ -4,7 +4,6 @@
 namespace EvanTsai\Laracart\Modules\Traits;
 
 
-use EvanTsai\Laracart\Gateways\PaymentGateway;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
 
@@ -37,19 +36,7 @@ trait Checkout
 
         return [
             $request->input('gateway', $availableGateways[0]),
-            $request->input('payment_method', \ECPay_PaymentMethod::ALL),
+            $request->input('payment_method'),
         ];
-    }
-
-    protected function getGatewayClass($gateway)
-    {
-        $gatewayClassName = config('laracart.gateways.' . $gateway . '.class');
-        $gatewayClass = new $gatewayClassName;
-
-        if (!$gatewayClass instanceof PaymentGateway) {
-            throw new \UnexpectedValueException($gatewayClassName . ' is not a Payment Gateway');
-        }
-
-        return $gatewayClass;
     }
 }

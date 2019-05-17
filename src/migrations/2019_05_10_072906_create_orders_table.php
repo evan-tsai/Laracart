@@ -22,6 +22,9 @@ class CreateOrdersTable extends Migration
             $table->string('address')->nullable();
             $table->string('payment_gateway')->nullable();
             $table->string('payment_method')->nullable();
+            $table->string('payment_id')->nullable();
+            $table->dateTime('payment_date')->nullable();
+            $table->dateTime('expire_date')->nullable();
             $table->unsignedTinyInteger('status')->default(1);
             $table->timestamps();
         });
