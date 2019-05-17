@@ -70,7 +70,6 @@ class ECPayGateway extends PaymentGateway
 
         if ($check) {
             if (!$order->payment_method) $order->payment_method = $request->PaymentType;
-            $order->expire_date = $request->ExpireDate;
             $order->payment_date = $request->TradeDate;
             $order->payment_id = $request->TradeNo;
 
@@ -79,9 +78,8 @@ class ECPayGateway extends PaymentGateway
                     $order->status = $order::STATUS_COMPLETED;
                     break;
                 case 2:
-                    $order->status = $order::STATUS_PENDING;
-                    break;
                 case 10100073:
+                    $order->expire_date = $request->ExpireDate;
                     $order->status = $order::STATUS_PENDING;
                     break;
                 default:

@@ -16,7 +16,7 @@ trait PlaceOrder
         $validated = $this->validate($request);
 
         $this->appendValues($validated);
-        $this->order->save();
+        $this->model->save();
 
         $cartItems = json_decode($validated['cart'], true);
         $this->saveProducts($cartItems);
@@ -29,7 +29,7 @@ trait PlaceOrder
         $yearMonth = Carbon::now()->format('Ym');
         $idPrefix = strtoupper(sprintf('%s%06d', config('laracart.order_prefix'), $yearMonth));
 
-        $maxId = call_user_func($this->getOrderClass() . '::max', 'id');
+        $maxId = call_user_func($this->getModelClass() . '::max', 'id');
 
         $max = intval(str_replace($idPrefix, '', $maxId));
 
@@ -46,15 +46,15 @@ trait PlaceOrder
 
     protected function appendValues($data)
     {
-        $this->order->id = $this->calculateNextId();
+        $this->model->id = $this->calculateNextId();
 
         if (config('laracart.models.user')) {
-            $this->order->user_id = Auth::id();
+            $this->model->user_id = Auth::id();
         }
 
         foreach ($data as $key => $value) {
             if (Schema::hasColumn(config('laracart.tables.order'), $key)) {
-                $this->order->{$key} = $value;
+                $this->model->{$key} = $value;
             }
         }
     }
@@ -68,6 +68,6 @@ trait PlaceOrder
             return [$item['id'] => ['quantity' => $item['quantity']]];
         });
 
-        $this->order->products()->sync($products);
+        $this->model->products()->sync($products);
     }
 }

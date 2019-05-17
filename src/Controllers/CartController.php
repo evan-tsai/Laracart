@@ -4,20 +4,22 @@ namespace EvanTsai\Laracart\Controllers;
 
 use App\Http\Controllers\Controller;
 use EvanTsai\Laracart\Modules\OrderModule;
-use EvanTsai\Laracart\Queries\ProductQuery;
+use EvanTsai\Laracart\Modules\ProductModule;
 use Illuminate\Http\Request;
 
 
 class CartController extends Controller
 {
-    public function getProducts(ProductQuery $query)
+    public function getProducts(ProductModule $productModule)
     {
-        return response()->json($query->get());
+        $products = $productModule->query()->get();
+
+        return response()->json($products);
     }
 
-    public function findProduct($id, ProductQuery $query)
+    public function findProduct($id, ProductModule $productModule)
     {
-        $product = $query->find($id);
+        $product = $productModule->for($id)->getModel();
 
         return response()->json($product);
     }
@@ -45,5 +47,10 @@ class CartController extends Controller
         $result = $orderModule->processOrder($request);
 
         return response()->json($result);
+    }
+
+    protected function getProductQuery()
+    {
+
     }
 }

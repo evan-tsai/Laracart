@@ -10,40 +10,13 @@ use EvanTsai\Laracart\Modules\Traits\Checkout;
 use EvanTsai\Laracart\Modules\Traits\PlaceOrder;
 use EvanTsai\Laracart\Modules\Traits\ProcessOrder;
 
-class OrderModule implements OrderContract
+class OrderModule extends BaseModule implements OrderContract
 {
     use Checkout, PlaceOrder, ProcessOrder;
 
-    protected $order;
-
-    public function __construct()
-    {
-        $orderClass = $this->getOrderClass();
-
-        $this->order = new $orderClass;
-    }
-
-    public function for($id)
-    {
-        $order = call_user_func($this->getOrderClass() . '::find', $id);
-
-        if (!$order) {
-            throw new \ErrorException('Order not found');
-        }
-
-        $this->order = $order;
-
-        return $this;
-    }
-
-    protected function getOrderClass()
+    protected function getModelClass()
     {
         return config('laracart.models.order');
-    }
-
-    public function getOrder()
-    {
-        return $this->order;
     }
 
     protected function getGatewayClass($gateway)

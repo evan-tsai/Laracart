@@ -13,13 +13,13 @@ trait Checkout
     {
         [$gateway, $paymentMethod] = $this->validateRequest($request);
 
-        $this->order->payment_gateway = $gateway;
-        $this->order->payment_method = $paymentMethod;
-        $this->order->save();
+        $this->model->payment_gateway = $gateway;
+        $this->model->payment_method = $paymentMethod;
+        $this->model->save();
 
         $gatewayClass = $this->getGatewayClass($gateway);
 
-        return $gatewayClass->checkout($this->order);
+        return $gatewayClass->checkout($this->model);
     }
 
     protected function validateRequest($request)

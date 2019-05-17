@@ -41,6 +41,7 @@ class Order extends Model
     public static function getStatusLabels()
     {
         return collect([
+            self::STATUS_CREATED => 'Created',
             self::STATUS_PENDING => 'Pending',
             self::STATUS_COMPLETED => 'Completed',
             self::STATUS_FAILED => 'Failed',
