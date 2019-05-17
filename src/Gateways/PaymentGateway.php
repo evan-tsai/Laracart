@@ -4,7 +4,7 @@
 namespace EvanTsai\Laracart\Gateways;
 
 
-use Illuminate\Database\Eloquent\Model;
+use EvanTsai\Laracart\Models\Order;
 use Illuminate\Http\Request;
 
 abstract class PaymentGateway
@@ -15,7 +15,7 @@ abstract class PaymentGateway
 
     public function __construct()
     {
-        $this->callbackRoute = route(config('laracart.callback_route'), ['gateway' => $this->getGatewayKey()]);
+        $this->callbackRoute = route('laracart.callback', ['gateway' => $this->getGatewayKey()]);
         $this->redirectRoute = route(config('laracart.callback_redirect_route'));
     }
 
@@ -23,7 +23,7 @@ abstract class PaymentGateway
 
     abstract public function getGatewayKey();
 
-    abstract public function checkOut(Model $order);
+    abstract public function checkOut(Order $order);
 
-    abstract public function callback(Model $order, Request $request);
+    abstract public function callback(Order $order, Request $request);
 }

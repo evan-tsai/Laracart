@@ -28,17 +28,15 @@ class CartController extends Controller
     {
         $order = $orderModule->placeOrder($request)->getModel();
 
-        if (!config('laracart.order_review_route')) {
+        $routeName = config('laracart.order_review_route');
+
+        if (!$routeName) {
             $result = $orderModule->checkout($request);
 
             return response()->json($result);
         }
 
-        return response()->json([
-            'redirect' => route(config('laracart.order_review_route'), [
-                'order' => $order->id
-            ])
-        ]);
+        return response()->json(['redirect' => route($routeName, ['order' => $order->id])]);
     }
 
     public function checkout($id, Request $request, OrderModule $orderModule)

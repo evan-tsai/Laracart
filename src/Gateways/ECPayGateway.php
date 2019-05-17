@@ -5,7 +5,7 @@ namespace EvanTsai\Laracart\Gateways;
 
 
 use ECPay_AllInOne;
-use Illuminate\Database\Eloquent\Model;
+use EvanTsai\Laracart\Models\Order;
 use Illuminate\Http\Request;
 
 class ECPayGateway extends PaymentGateway
@@ -36,7 +36,7 @@ class ECPayGateway extends PaymentGateway
         return 'MerchantTradeNo';
     }
 
-    public function checkOut(Model $order)
+    public function checkOut(Order $order)
     {
         try {
             $this->sdk->ServiceURL = config('laracart.gateways.ecpay.api_url');
@@ -63,7 +63,7 @@ class ECPayGateway extends PaymentGateway
         }
     }
 
-    public function callback(Model $order, Request $request)
+    public function callback(Order $order, Request $request)
     {
         $code = self::CODE_SUCCESS;
         $check = \ECPay_CheckMacValue::generate($request->except(['gateway']), $this->hashKey, $this->hashIV);

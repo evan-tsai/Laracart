@@ -134,6 +134,7 @@ return [
     |--------------------------------------------------------------------------
     |
     | Which route to call after the callback has been processed.
+    | Note: ECpay uses POST
     |
     */
 
