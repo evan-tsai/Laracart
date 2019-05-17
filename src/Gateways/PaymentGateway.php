@@ -20,7 +20,10 @@ abstract class PaymentGateway
     }
 
     abstract public function getOrderIdField();
+
     abstract public function getGatewayKey();
+
     abstract public function checkOut(Model $order);
+
     abstract public function callback(Model $order, Request $request);
 }

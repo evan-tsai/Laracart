@@ -23,6 +23,7 @@ class Order extends Model
     public function __construct(array $attributes = [])
     {
         parent::__construct($attributes);
+
         $this->table = config('laracart.tables.order');
     }
 

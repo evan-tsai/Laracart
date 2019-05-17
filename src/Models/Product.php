@@ -13,6 +13,7 @@ class Product extends Model
     public function __construct(array $attributes = [])
     {
         parent::__construct($attributes);
+
         $this->table = config('laracart.tables.product');
     }
 }
