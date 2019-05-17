@@ -85,16 +85,16 @@ return [
 
     /*
     |--------------------------------------------------------------------------
-    | Immediate Checkout
+    | Order Review Route
     |--------------------------------------------------------------------------
     |
-    | Checks out immediately after placing order.
-    | Set to false if you want the user to
-    | be able to review his cart.
+    | If null, checks out cart immediately after placing order.
+    | Set route if you want to review order before submitting,
+    | Package will automatically send order ID as request.
     |
     */
 
-    'check_out_immediately' => true,
+    'order_review_route' => null,
 
     /*
    |--------------------------------------------------------------------------

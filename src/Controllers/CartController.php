@@ -26,15 +26,19 @@ class CartController extends Controller
 
     public function createOrder(Request $request, OrderModule $orderModule)
     {
-        $orderModule->placeOrder($request);
+        $order = $orderModule->placeOrder($request)->getModel();
 
-        if (config('laracart.check_out_immediately')) {
+        if (!config('laracart.order_review_route')) {
             $result = $orderModule->checkout($request);
 
             return response()->json($result);
         }
 
-        return response()->json(['redirect' => route('test')]);
+        return response()->json([
+            'redirect' => route(config('laracart.order_review_route'), [
+                'order' => $order->id
+            ])
+        ]);
     }
 
     public function checkout($id, Request $request, OrderModule $orderModule)
@@ -47,10 +51,5 @@ class CartController extends Controller
         $result = $orderModule->processOrder($request);
 
         return response()->json($result);
-    }
-
-    protected function getProductQuery()
-    {
-
     }
 }
