@@ -11,6 +11,10 @@ class Order extends Model
     const STATUS_FAILED = 3;
     const STATUS_CANCELLED = 4;
 
+    public $incrementing = false;
+
+    protected $keyType = 'string';
+
     protected $table;
 
     protected $guarded = ['id'];

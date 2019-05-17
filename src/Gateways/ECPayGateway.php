@@ -26,28 +26,37 @@ class ECPayGateway extends PaymentGateway
             $this->sdk->HashIV      = config('laracart.gateways.ecpay.hash_iv');
             $this->sdk->MerchantID  = config('laracart.gateways.ecpay.merchant_id');
             $this->sdk->Send['ReturnURL'] = route(config('laracart.callback_route'));
-            $this->sdk->Send['MerchantTradeNo']   = uniqid();
+            $this->sdk->Send['MerchantTradeNo']   = $order->id;
             $this->sdk->Send['MerchantTradeDate'] = date('Y/m/d H:i:s');
-            $this->sdk->Send['TotalAmount']       = (int) 2000;
             $this->sdk->Send['TradeDesc']         = '商店訂購商品，訂單編號：' . $order->id;
             $this->sdk->Send['NeedExtraPaidInfo'] = 'Y';
-            $this->sdk->Send['ChoosePayment'] = \ECPay_PaymentMethod::ALL;
+            $this->sdk->Send['ChoosePayment'] = $order->payment_method;
             $this->sdk->Send['EncryptType'] = 1;
-
-            $items = $order->products->map(function ($item) {
-                return [
-                    'Name' => $item->name,
-                    'Price' => (int) $item->price,
-                    'Currency' => '元',
-                    'Quantity' => (int) $item->pivot->quantity,
-                ];
-            });
-
-            $this->sdk->Send['Items'] = $items->toArray();
+            $this->sdk->Send['Items'] = $this->getItems($order);
+            $this->sdk->Send['TotalAmount'] = (int) $this->getTotal($order);
 
             return $this->sdk->CheckOutString(null);
         } catch (\Exception $e) {
-            echo $e->getMessage();
+            return $e->getMessage();
         }
+    }
+
+    protected function getItems($order)
+    {
+        return $order->products->map(function ($item) {
+            return [
+                'Name' => $item->name,
+                'Price' => (int) $item->price,
+                'Currency' => '元',
+                'Quantity' => (int) $item->pivot->quantity,
+            ];
+        });
+    }
+
+    protected function getTotal($order)
+    {
+        return $order->products->sum(function ($item) {
+            return $item->price * $item->pivot->quantity;
+        });
     }
 }

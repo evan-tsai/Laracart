@@ -4,6 +4,7 @@
 namespace EvanTsai\Laracart\Modules\Traits;
 
 
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Schema;
@@ -23,6 +24,18 @@ trait PlaceOrder
         return $this;
     }
 
+    public function calculateNextId()
+    {
+        $yearMonth = Carbon::now()->format('Ym');
+        $idPrefix = strtoupper(sprintf('%s%06d', config('laracart.order_prefix'), $yearMonth));
+
+        $maxId = call_user_func($this->getOrderClass() . '::max', 'id');
+
+        $max = intval(str_replace($idPrefix, '', $maxId));
+
+        return $idPrefix . sprintf('%05d', $max + 1);
+    }
+
     protected function validate($request)
     {
         return $request->validate(array_merge(
@@ -33,6 +46,8 @@ trait PlaceOrder
 
     protected function appendValues($data)
     {
+        $this->order->id = $this->calculateNextId();
+
         if (config('laracart.models.user')) {
             $this->order->user_id = Auth::id();
         }

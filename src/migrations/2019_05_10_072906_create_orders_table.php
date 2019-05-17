@@ -14,7 +14,7 @@ class CreateOrdersTable extends Migration
     public function up()
     {
         Schema::create($this->getTableName(), function (Blueprint $table) {
-            $table->bigIncrements('id');
+            $table->string('id')->primary();
             $table->unsignedInteger('user_id')->nullable();
             $table->string('email');
             $table->string('name');
@@ -22,7 +22,6 @@ class CreateOrdersTable extends Migration
             $table->string('address')->nullable();
             $table->string('payment_gateway')->nullable();
             $table->string('payment_method')->nullable();
-            $table->string('payment_id')->nullable();
             $table->unsignedTinyInteger('status')->default(1);
             $table->timestamps();
         });

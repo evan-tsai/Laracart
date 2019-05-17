@@ -12,9 +12,10 @@ trait Checkout
 {
     public function checkout(Request $request)
     {
-        $gateway = $this->validateAndRetrieveGateway($request);
+        [$gateway, $paymentMethod] = $this->validateRequest($request);
 
         $this->order->payment_gateway = $gateway;
+        $this->order->payment_method = $paymentMethod;
         $this->order->save();
 
         $gatewayClass = $this->getGatewayClass($gateway);
@@ -22,7 +23,7 @@ trait Checkout
         return $gatewayClass->checkout($this->order);
     }
 
-    protected function validateAndRetrieveGateway($request)
+    protected function validateRequest($request)
     {
         $availableGateways = config('laracart.available_gateways');
 
@@ -30,10 +31,14 @@ trait Checkout
             'gateway' => [
                 'sometimes',
                 Rule::in($availableGateways),
-            ]
+            ],
+            'payment_method' => 'nullable|string',
         ]);
 
-        return $request->input('gateway', $availableGateways[0]);
+        return [
+            $request->input('gateway', $availableGateways[0]),
+            $request->input('payment_method', \ECPay_PaymentMethod::ALL),
+        ];
     }
 
     protected function getGatewayClass($gateway)

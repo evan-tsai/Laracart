@@ -15,9 +15,12 @@ class CreateOrdersProductsTable extends Migration
     {
         Schema::create($this->getTableName(), function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->unsignedInteger('order_id');
-            $table->unsignedInteger('product_id');
+            $table->string('order_id');
+            $table->unsignedBigInteger('product_id');
             $table->unsignedInteger('quantity');
+
+            $table->foreign('order_id')->references('id')->on(config('laracart.tables.order'))->onDelete('cascade');
+            $table->foreign('product_id')->references('id')->on(config('laracart.tables.product'));
             $table->timestamps();
         });
     }
