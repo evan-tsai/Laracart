@@ -6,10 +6,11 @@ use Illuminate\Database\Eloquent\Model;
 
 class Order extends Model
 {
-    const STATUS_PENDING = 1;
-    const STATUS_COMPLETED = 2;
-    const STATUS_FAILED = 3;
-    const STATUS_CANCELLED = 4;
+    const STATUS_CREATED = 1;
+    const STATUS_PENDING = 2;
+    const STATUS_COMPLETED = 3;
+    const STATUS_FAILED = 4;
+    const STATUS_CANCELLED = 5;
 
     public $incrementing = false;
 

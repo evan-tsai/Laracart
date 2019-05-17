@@ -10,13 +10,25 @@ use Illuminate\Http\Request;
 
 class ECPayGateway extends PaymentGateway
 {
+    const CODE_SUCCESS = '1|OK';
+    const CODE_FAIL = '0|fail';
+
     protected $sdk;
+    protected $hashKey;
+    protected $hashIV;
 
     public function __construct()
     {
         parent::__construct();
 
         $this->sdk = new ECPay_AllInOne;
+        $this->hashKey = config('laracart.gateways.ecpay.hash_key');
+        $this->hashIV = config('laracart.gateways.ecpay.hash_iv');
+    }
+
+    public function getGatewayKey()
+    {
+        return 'ecpay';
     }
 
     public function getOrderIdField()
@@ -28,14 +40,16 @@ class ECPayGateway extends PaymentGateway
     {
         try {
             $this->sdk->ServiceURL = config('laracart.gateways.ecpay.api_url');
-            $this->sdk->HashKey    = config('laracart.gateways.ecpay.hash_key');
-            $this->sdk->HashIV     = config('laracart.gateways.ecpay.hash_iv');
             $this->sdk->MerchantID = config('laracart.gateways.ecpay.merchant_id');
+            $this->sdk->HashKey    = $this->hashKey;
+            $this->sdk->HashIV     = $this->hashIV;
 
-            $this->sdk->Send['ReturnURL']         = route(config('laracart.callback_route'), ['gateway' => 'ecpay']);
-            $this->sdk->Send['OrderResultURL']    = route(config('laracart.callback_redirect_route'));
+            $this->sdk->Send['ReturnURL']         = $this->callbackRoute;
+            $this->sdk->Send['PaymentInfoURL']    = $this->callbackRoute;
+            $this->sdk->Send['OrderResultURL']    = $this->redirectRoute;
+            $this->sdk->Send['ClientBackURL']     = url('/');
             $this->sdk->Send['MerchantTradeNo']   = $order->id;
-            $this->sdk->Send['MerchantTradeDate'] = date('Y/m/d H:i:s');
+            $this->sdk->Send['MerchantTradeDate'] = $order->created_at->format('Y/m/d H:i:s');
             $this->sdk->Send['TradeDesc']         = '商店訂購商品，訂單編號：' . $order->id;
             $this->sdk->Send['NeedExtraPaidInfo'] = 'Y';
             $this->sdk->Send['ChoosePayment']     = $order->payment_method ?: \ECPay_PaymentMethod::ALL;
@@ -51,13 +65,34 @@ class ECPayGateway extends PaymentGateway
 
     public function callback(Model $order, Request $request)
     {
-        if (!$order->payment_type) $order->payment_type = $request->PaymentType;
-        $order->expire_date = $request->ExpireDate;
-        $order->payment_date = $request->TradeDate;
-        $order->payment_id = $request->TradeNo;
-        $order->status = ($request->RtnCode === 1) ? $order::STATUS_COMPLETED : $order::STATUS_FAILED;
+        $code = self::CODE_SUCCESS;
+        $check = \ECPay_CheckMacValue::generate($request->except(['gateway']), $this->hashKey, $this->hashIV);
 
-        $order->save();
+        if ($check) {
+            if (!$order->payment_method) $order->payment_method = $request->PaymentType;
+            $order->expire_date = $request->ExpireDate;
+            $order->payment_date = $request->TradeDate;
+            $order->payment_id = $request->TradeNo;
+
+            switch ($request->RtnCode) {
+                case 1:
+                    $order->status = $order::STATUS_COMPLETED;
+                    break;
+                case 2:
+                    $order->status = $order::STATUS_PENDING;
+                    break;
+                case 10100073:
+                    $order->status = $order::STATUS_PENDING;
+                    break;
+                default:
+                    $order->status = $order::STATUS_FAILED;
+                    $code = self::CODE_FAIL;
+            }
+
+            $order->save();
+        }
+
+        return $code;
     }
 
     protected function getItems($order)

@@ -12,10 +12,10 @@ trait ProcessOrder
     {
         $paymentClass = $this->getGatewayClass($request->gateway);
 
-        $orderId = $request->{$paymentClass->getOrderIdField};
+        $orderId = $request->{$paymentClass->getOrderIdField()};
 
         $order = $this->for($orderId)->getOrder();
 
-        $paymentClass->callback($order, $request);
+        return $paymentClass->callback($order, $request);
     }
 }

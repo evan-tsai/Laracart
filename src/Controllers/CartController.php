@@ -6,7 +6,6 @@ use App\Http\Controllers\Controller;
 use EvanTsai\Laracart\Modules\OrderModule;
 use EvanTsai\Laracart\Queries\ProductQuery;
 use Illuminate\Http\Request;
-use Illuminate\Validation\Rule;
 
 
 class CartController extends Controller
@@ -43,6 +42,8 @@ class CartController extends Controller
 
     public function callback(Request $request, OrderModule $orderModule)
     {
-        $orderModule->processOrder($request);
+        $result = $orderModule->processOrder($request);
+
+        return response()->json($result);
     }
 }
