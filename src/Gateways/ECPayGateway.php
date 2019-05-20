@@ -66,30 +66,31 @@ class ECPayGateway extends PaymentGateway
 
     public function callback(Order $order, Request $request)
     {
-        $code = self::CODE_SUCCESS;
+        if (!$order->payment_method) $order->payment_method = $request->PaymentType;
+        $order->payment_date = $request->TradeDate;
+        $order->payment_id = $request->TradeNo;
+        $order->status = $order::STATUS_FAILED;
+
+        $code = self::CODE_FAIL;
+
         $check = \ECPay_CheckMacValue::generate($request->except(['gateway']), $this->hashKey, $this->hashIV);
 
         if ($check === $request->CheckMacValue) {
-            if (!$order->payment_method) $order->payment_method = $request->PaymentType;
-            $order->payment_date = $request->TradeDate;
-            $order->payment_id = $request->TradeNo;
-
             switch ($request->RtnCode) {
                 case 1:
+                    $code = self::CODE_SUCCESS;
                     $order->status = $order::STATUS_COMPLETED;
                     break;
                 case 2:
                 case 10100073:
+                    $code = self::CODE_SUCCESS;
                     $order->expire_date = $request->ExpireDate;
                     $order->status = $order::STATUS_PENDING;
                     break;
-                default:
-                    $order->status = $order::STATUS_FAILED;
-                    $code = self::CODE_FAIL;
             }
-
-            $order->save();
         }
+
+        $order->save();
 
         return $code;
     }
