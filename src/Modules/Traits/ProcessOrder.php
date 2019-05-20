@@ -14,7 +14,7 @@ trait ProcessOrder
 
         $orderId = $request->{$paymentClass->getOrderIdField()};
 
-        $order = $this->for($orderId)->getOrder();
+        $order = $this->for($orderId)->getModel();
 
         return $paymentClass->callback($order, $request);
     }
