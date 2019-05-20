@@ -73,7 +73,7 @@ class ECPayGateway extends PaymentGateway
 
         $code = self::CODE_FAIL;
 
-        $check = \ECPay_CheckMacValue::generate($request->except(['gateway']), $this->hashKey, $this->hashIV);
+        $check = \ECPay_CheckMacValue::generate($request->except(['gateway']), $this->hashKey, $this->hashIV, 1);
 
         if ($check === $request->CheckMacValue) {
             switch ($request->RtnCode) {
