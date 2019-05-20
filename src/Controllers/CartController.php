@@ -44,9 +44,9 @@ class CartController extends Controller
         $orderModule->for($id)->checkout($request);
     }
 
-    public function callback(Request $request, OrderModule $orderModule)
+    public function callback($id, Request $request, OrderModule $orderModule)
     {
-        $result = $orderModule->processOrder($request);
+        $result = $orderModule->processOrder($id, $request);
 
         return response()->json($result);
     }

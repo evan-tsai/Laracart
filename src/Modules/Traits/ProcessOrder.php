@@ -8,13 +8,11 @@ use Illuminate\Http\Request;
 
 trait ProcessOrder
 {
-    public function processOrder(Request $request)
+    public function processOrder($orderId, Request $request)
     {
-        $paymentClass = $this->getGatewayClass($request->gateway);
-
-        $orderId = $request->{$paymentClass->getOrderIdField()};
-
         $order = $this->for($orderId)->getModel();
+
+        $paymentClass = $this->getGatewayClass($order->payment_gateway);
 
         return $paymentClass->callback($order, $request);
     }

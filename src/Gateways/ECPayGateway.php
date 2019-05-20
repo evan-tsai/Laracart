@@ -8,7 +8,7 @@ use ECPay_AllInOne;
 use EvanTsai\Laracart\Models\Order;
 use Illuminate\Http\Request;
 
-class ECPayGateway extends PaymentGateway
+class ECPayGateway implements PaymentContract
 {
     const CODE_SUCCESS = '1|OK';
     const CODE_FAIL = '0|fail';
@@ -19,8 +19,6 @@ class ECPayGateway extends PaymentGateway
 
     public function __construct()
     {
-        parent::__construct();
-
         $this->sdk = new ECPay_AllInOne;
         $this->hashKey = config('laracart.gateways.ecpay.hash_key');
         $this->hashIV = config('laracart.gateways.ecpay.hash_iv');
@@ -44,9 +42,9 @@ class ECPayGateway extends PaymentGateway
             $this->sdk->HashKey    = $this->hashKey;
             $this->sdk->HashIV     = $this->hashIV;
 
-            $this->sdk->Send['ReturnURL']         = $this->callbackRoute;
-            $this->sdk->Send['PaymentInfoURL']    = $this->callbackRoute;
-            $this->sdk->Send['OrderResultURL']    = $this->redirectRoute;
+            $this->sdk->Send['ReturnURL']         = route('laracart.callback', $order->id);
+            $this->sdk->Send['PaymentInfoURL']    = route('laracart.callback', $order->id);
+            $this->sdk->Send['OrderResultURL']    = route(config('laracart.callback_redirect_route'));
             // TODO: Direct back to order
             $this->sdk->Send['ClientBackURL']     = url('/');
             $this->sdk->Send['MerchantTradeNo']   = $order->id;
@@ -54,9 +52,10 @@ class ECPayGateway extends PaymentGateway
             $this->sdk->Send['TradeDesc']         = '商店訂購商品，訂單編號：' . $order->id;
             $this->sdk->Send['NeedExtraPaidInfo'] = 'Y';
             $this->sdk->Send['ChoosePayment']     = $order->payment_method ?: \ECPay_PaymentMethod::ALL;
-            $this->sdk->Send['EncryptType']       = 1;
             $this->sdk->Send['Items']             = $this->getItems($order);
             $this->sdk->Send['TotalAmount']       = (int) $this->getTotal($order);
+            $this->sdk->Send['ExpireDate']        = 7;
+            $this->sdk->Send['EncryptType']       = 1;
 
             return ['html' => $this->sdk->CheckOutString(null)];
         } catch (\Exception $e) {

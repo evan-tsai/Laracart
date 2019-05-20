@@ -12,5 +12,5 @@ interface OrderContract
 
     public function checkout(Request $request);
 
-    public function processOrder(Request $request);
+    public function processOrder($orderId, Request $request);
 }
