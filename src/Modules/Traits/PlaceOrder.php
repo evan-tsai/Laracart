@@ -26,14 +26,14 @@ trait PlaceOrder
 
     protected function calculateNextId()
     {
-        $yearMonth = Carbon::now()->format('Ym');
+        $yearMonth = Carbon::now()->format('ymd');
         $idPrefix = strtoupper(sprintf('%s%06d', config('laracart.order_prefix'), $yearMonth));
 
         $maxId = call_user_func($this->getModelClass() . '::max', 'id');
 
         $max = intval(str_replace($idPrefix, '', $maxId));
 
-        return $idPrefix . sprintf('%05d', $max + 1);
+        return $idPrefix . sprintf('%04d', $max + 1);
     }
 
     protected function validate($request)

@@ -47,6 +47,7 @@ class ECPayGateway extends PaymentGateway
             $this->sdk->Send['ReturnURL']         = $this->callbackRoute;
             $this->sdk->Send['PaymentInfoURL']    = $this->callbackRoute;
             $this->sdk->Send['OrderResultURL']    = $this->redirectRoute;
+            // TODO: Direct back to order
             $this->sdk->Send['ClientBackURL']     = url('/');
             $this->sdk->Send['MerchantTradeNo']   = $order->id;
             $this->sdk->Send['MerchantTradeDate'] = $order->created_at->format('Y/m/d H:i:s');
@@ -68,7 +69,7 @@ class ECPayGateway extends PaymentGateway
         $code = self::CODE_SUCCESS;
         $check = \ECPay_CheckMacValue::generate($request->except(['gateway']), $this->hashKey, $this->hashIV);
 
-        if ($check) {
+        if ($check === $request->CheckMacValue) {
             if (!$order->payment_method) $order->payment_method = $request->PaymentType;
             $order->payment_date = $request->TradeDate;
             $order->payment_id = $request->TradeNo;
